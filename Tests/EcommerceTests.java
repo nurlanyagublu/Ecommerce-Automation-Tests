@@ -19,8 +19,12 @@ public class EcommerceTests {
 
     @BeforeEach
     void setUp() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
+
+        driver = new ChromeDriver(options);
     }
 
     @AfterEach
@@ -77,8 +81,7 @@ public class EcommerceTests {
                 () -> assertFalse(productPage.getDescription().isBlank()),
                 () -> assertTrue(productPage.isQuantityControlDisplayed()),
                 () -> assertTrue(productPage.isDecreaseButtonDisplayed()),
-                () -> assertTrue(productPage.isIncreaseButtonDisplayed())
-            );
+                () -> assertTrue(productPage.isIncreaseButtonDisplayed()));
     }
 
     @Test
@@ -111,9 +114,8 @@ public class EcommerceTests {
         assertAll(
                 () -> assertEquals("2", cartPage.getQuantity()),
                 () -> assertTrue(cartPage.getUpdateMessage().contains("modified your shopping cart")),
-                () -> assertNotEquals(totalBefore,cartPage.getProductTotal()),
-                () -> assertFalse(cartPage.getSubtotal().isBlank())
-        );
+                () -> assertNotEquals(totalBefore, cartPage.getProductTotal()),
+                () -> assertFalse(cartPage.getSubtotal().isBlank()));
     }
 
     @Test
@@ -130,8 +132,7 @@ public class EcommerceTests {
         assertAll(
                 () -> assertEquals("Shopping Cart", cartPage.getShoppingCartTitle()),
                 () -> assertEquals("Your shopping cart is empty!", cartPage.getEmptyCartMessage()),
-                () -> assertTrue(cartPage.isContinueButtonDisplayed())
-        );
+                () -> assertTrue(cartPage.isContinueButtonDisplayed()));
     }
 
     @Test
@@ -147,8 +148,7 @@ public class EcommerceTests {
                 "Smith",
                 uniqueEmail,
                 "+12345678901",
-                "Password123!"
-        );
+                "Password123!");
 
         registerPage.agreeToPrivacyPolicy();
 
