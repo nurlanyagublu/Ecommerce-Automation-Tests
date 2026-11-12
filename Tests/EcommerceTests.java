@@ -1,9 +1,16 @@
 package Tests;
 
+import io.qameta.allure.Allure;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
@@ -12,11 +19,31 @@ import pages.HomePage;
 import pages.ProductPage;
 import pages.RegisterPage;
 
+import java.io.ByteArrayInputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EcommerceTests {
 
     private WebDriver driver;
+
+    @RegisterExtension
+    private final TestExecutionExceptionHandler screenshotOnFailure =
+            (ExtensionContext context, Throwable failure) -> {
+                if (driver != null) {
+                    try {
+                        byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                        Allure.addAttachment(
+                                "Failure screenshot",
+                                "image/png",
+                                new ByteArrayInputStream(screenshot),
+                                ".png");
+                    } catch (WebDriverException screenshotError) {
+                        Allure.addAttachment("Screenshot capture error", screenshotError.toString());
+                    }
+                }
+                throw failure;
+            };
 
     @BeforeEach
     void setUp() {

@@ -26,6 +26,17 @@ This repository is an e-commerce test-automation practice project. The test pack
 
 The commands above are conditional examples; use the build file and scripts actually present in the repository as the source of truth.
 
+## Test reports
+
+Allure records JUnit results and attaches a browser screenshot when a test fails. Run the tests and generate an HTML report with:
+
+```bash
+mvn test
+mvn allure:report
+```
+
+Open `target/site/allure-maven-plugin/index.html` to view the report locally. GitHub Actions uploads the HTML report, raw Allure results, and Maven test reports as an artifact for each workflow run. Download the artifact from that run's **Summary** page; it is retained for 14 days.
+
 ## Test organization and maintenance
 
 - Keep automated checks in the test source tree and follow the naming and package conventions already used by the project.
