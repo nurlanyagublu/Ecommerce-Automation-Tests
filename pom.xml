@@ -7,16 +7,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>api-football-tests</artifactId>
+    <artifactId>ecommerce-automation-tests</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>E-commerce Automation Tests</name>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <junit.version>5.14.2</junit.version>
-        <rest-assured.version>6.0.0</rest-assured.version>
-        <hamcrest.version>3.0</hamcrest.version>
     </properties>
 
     <dependencies>
@@ -34,27 +33,40 @@
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.35.0</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- Automatically manages ChromeDriver -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>6.3.3</version>
-        </dependency>
-
-        <!-- REST Assured for API tests -->
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>6.0.0</version>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
 
     <build>
+        <testSourceDirectory>${project.basedir}/Tests</testSourceDirectory>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>add-page-objects-as-test-sources</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/pages</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
